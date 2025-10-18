@@ -12,4 +12,5 @@
 
 
 # Strona glowna - wstepny projekt
-<img width="542" height="1069" alt="image" src="https://github.com/user-attachments/assets/6ce1ba10-6b86-4d94-b178-52c0fad14ea3" />
+<img width="534" height="1072" alt="image" src="https://github.com/user-attachments/assets/507d674e-3322-4853-b688-8d01d2f6b130" />
+
