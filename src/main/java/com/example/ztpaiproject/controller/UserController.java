@@ -19,4 +19,11 @@ public class UserController {
         String currentUsername = authentication.getName();
         return ResponseEntity.ok(userService.getUserProfile(currentUsername));
     }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<UserResponse> getUserProfile(@PathVariable String username) {
+        UserResponse profile = userService.getUserProfile(username);
+        profile.setEmail(null);
+        return ResponseEntity.ok(profile);
+    }
 }
