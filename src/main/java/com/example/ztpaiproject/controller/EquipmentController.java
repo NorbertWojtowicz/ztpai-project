@@ -1,6 +1,7 @@
 package com.example.ztpaiproject.controller;
 
 import com.example.ztpaiproject.dto.request.FishingBaitRequest;
+import com.example.ztpaiproject.dto.request.FishingToolRequest;
 import com.example.ztpaiproject.dto.response.EquipmentResponse;
 import com.example.ztpaiproject.service.EquipmentService;
 import jakarta.validation.Valid;
@@ -17,6 +18,19 @@ import java.util.List;
 public class EquipmentController {
 
     private final EquipmentService equipmentService;
+
+    @PostMapping("/tools")
+    public ResponseEntity<EquipmentResponse> addTool(
+            @Valid @RequestBody FishingToolRequest request,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(equipmentService.addTool(request, authentication.getName()));
+    }
+
+    @GetMapping("/tools")
+    public ResponseEntity<List<EquipmentResponse>> getMyTools(Authentication authentication) {
+        return ResponseEntity.ok(equipmentService.getMyTools(authentication.getName()));
+    }
 
     @PostMapping("/baits")
     public ResponseEntity<EquipmentResponse> addBait(
