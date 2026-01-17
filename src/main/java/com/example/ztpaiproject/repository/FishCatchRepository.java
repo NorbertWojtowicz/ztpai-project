@@ -3,6 +3,8 @@ package com.example.ztpaiproject.repository;
 import com.example.ztpaiproject.model.FishCatch;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FishCatchRepository extends JpaRepository<FishCatch, Long> {
+import java.util.List;
 
+public interface FishCatchRepository extends JpaRepository<FishCatch, Long> {
+    List<FishCatch> findByUser_UsernameOrderByCatchDateDesc(String username);
 }

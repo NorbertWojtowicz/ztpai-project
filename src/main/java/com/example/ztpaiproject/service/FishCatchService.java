@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class FishCatchService {
@@ -69,6 +72,12 @@ public class FishCatchService {
         FishCatch saved = catchRepository.save(fishCatch);
 
         return mapToResponse(saved);
+    }
+
+    public List<FishCatchResponse> getMyCatches(String username) {
+        return catchRepository.findByUser_UsernameOrderByCatchDateDesc(username).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     private FishCatchResponse mapToResponse(FishCatch entity) {
