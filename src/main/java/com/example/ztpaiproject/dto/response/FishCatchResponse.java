@@ -1,5 +1,6 @@
 package com.example.ztpaiproject.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,7 +18,8 @@ public class FishCatchResponse {
     private BigDecimal lengthCm;
     private String imageUrl;
 
-    private Boolean isPrivate;
+    @JsonProperty("isPrivate")
+    private boolean privateRecord;
     private Boolean wasReleased;
 
     private String fishSpeciesName;

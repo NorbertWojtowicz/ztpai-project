@@ -65,7 +65,7 @@ public class FishCatchService {
                 .weightKg(request.getWeightKg())
                 .lengthCm(request.getLengthCm())
                 .imageUrl(request.getImageUrl())
-                .isPrivate(request.getIsPrivate() != null ? request.getIsPrivate() : false)
+                .isPrivate(request.isPrivateRecord())
                 .wasReleased(request.getWasReleased() != null ? request.getWasReleased() : false)
                 .build();
 
@@ -94,6 +94,7 @@ public class FishCatchService {
                 .weightKg(entity.getWeightKg())
                 .lengthCm(entity.getLengthCm())
                 .imageUrl(entity.getImageUrl())
+                .privateRecord(entity.isPrivate())
                 .wasReleased(entity.getWasReleased())
                 .fishSpeciesName(entity.getFishSpecies().getName())
                 .locationName(entity.getLocation() != null ? entity.getLocation().getName() : "Nieznana")

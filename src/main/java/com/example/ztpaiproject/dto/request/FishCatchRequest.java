@@ -1,5 +1,6 @@
 package com.example.ztpaiproject.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -32,6 +33,7 @@ public class FishCatchRequest {
 
     private String imageUrl;
 
-    private Boolean isPrivate;
+    @JsonProperty("isPrivate")
+    private boolean privateRecord;
     private Boolean wasReleased;
 }

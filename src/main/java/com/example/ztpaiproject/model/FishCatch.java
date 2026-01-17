@@ -31,7 +31,7 @@ public class FishCatch {
 
     @Column(name = "is_private")
     @Builder.Default
-    private Boolean isPrivate = false;
+    private boolean isPrivate = false;
 
     @Column(name = "was_released")
     @Builder.Default
