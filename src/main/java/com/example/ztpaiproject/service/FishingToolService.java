@@ -38,6 +38,12 @@ public class FishingToolService {
         return mapToResponse(savedTool);
     }
 
+    public List<FishingToolResponse> getMyTools(String username) {
+        return toolRepository.findByUser_Username(username).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     private FishingToolResponse mapToResponse(FishingTool tool) {
         return FishingToolResponse.builder()
                 .id(tool.getId())

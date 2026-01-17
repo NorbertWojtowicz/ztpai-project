@@ -25,4 +25,9 @@ public class FishingToolController {
     ) {
         return ResponseEntity.ok(fishingToolService.addTool(request, authentication.getName()));
     }
+
+    @GetMapping
+    public ResponseEntity<List<FishingToolResponse>> getMyTools(Authentication authentication) {
+        return ResponseEntity.ok(fishingToolService.getMyTools(authentication.getName()));
+    }
 }
