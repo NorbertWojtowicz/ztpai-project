@@ -74,6 +74,12 @@ public class FishCatchService {
         return mapToResponse(saved);
     }
 
+    public List<FishCatchResponse> getAllPublicCatches() {
+        return catchRepository.findByIsPrivateFalseOrderByCatchDateDesc().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     public List<FishCatchResponse> getMyCatches(String username) {
         return catchRepository.findByUser_UsernameOrderByCatchDateDesc(username).stream()
                 .map(this::mapToResponse)

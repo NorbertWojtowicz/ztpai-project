@@ -32,6 +32,11 @@ public class FishCatchController {
 
     }
 
+    @GetMapping("/public")
+    public ResponseEntity<List<FishCatchResponse>> getPublicCatches() {
+        return ResponseEntity.ok(fishCatchService.getAllPublicCatches());
+    }
+
     @GetMapping("/my")
     public ResponseEntity<List<FishCatchResponse>> getMyCatches(Authentication authentication) {
         return ResponseEntity.ok(fishCatchService.getMyCatches(authentication.getName()));
