@@ -25,4 +25,9 @@ public class FishingBaitController {
     ) {
         return ResponseEntity.ok(fishingBaitService.addBait(request, authentication.getName()));
     }
+
+    @GetMapping
+    public ResponseEntity<List<FishingBaitResponse>> getMyBaits(Authentication authentication) {
+        return ResponseEntity.ok(fishingBaitService.getMyBaits(authentication.getName()));
+    }
 }

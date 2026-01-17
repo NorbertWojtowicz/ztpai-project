@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class FishingBaitService {
@@ -32,6 +35,12 @@ public class FishingBaitService {
         FishingBait savedBait = baitRepository.save(bait);
 
         return mapToResponse(savedBait);
+    }
+
+    public List<FishingBaitResponse> getMyBaits(String username) {
+        return baitRepository.findByUser_Username(username).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     private FishingBaitResponse mapToResponse(FishingBait bait) {
