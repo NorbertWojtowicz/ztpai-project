@@ -13,4 +13,5 @@ public class LocationResponse {
     private Double longitude;
     private boolean isPrivate;
     private String ownerUsername;
+    private String imageUrl;
 }

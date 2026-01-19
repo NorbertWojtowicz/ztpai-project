@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
         authService.registerUser(request);
-        return ResponseEntity.ok("Rejestracja pomyślna! Możesz się zalogować.");
+        return ResponseEntity.ok(Collections.singletonMap("message", "Rejestracja pomyślna! Możesz się zalogować."));
     }
 
     @PostMapping("/login")

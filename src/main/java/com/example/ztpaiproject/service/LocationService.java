@@ -9,6 +9,10 @@ import com.example.ztpaiproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.*;
+import java.util.UUID;
+import java.io.IOException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +25,7 @@ public class LocationService {
     private final UserRepository userRepository;
 
     @Transactional
-    public LocationResponse addLocation(LocationRequest request, String username) {
+    public LocationResponse addLocation(LocationRequest request, MultipartFile image, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -30,12 +34,35 @@ public class LocationService {
                 .description(request.getDescription())
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
-                .isPrivate(request.getIsPrivate() != null ? request.getIsPrivate() : false)
+                .isPrivate(request.getIsPrivate())
                 .user(user)
                 .build();
 
-        Location saved = locationRepository.save(location);
+        // 2. Obsługa zapisu pliku
+        if (image != null && !image.isEmpty()) {
+            try {
+                String folderPath = "images/spots/";
+                Files.createDirectories(Paths.get(folderPath));
 
+                String originalFilename = image.getOriginalFilename();
+                String extension = "";
+                if (originalFilename != null && originalFilename.contains(".")) {
+                    extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                }
+                String newFilename = UUID.randomUUID().toString() + extension;
+
+                Path path = Paths.get(folderPath + newFilename);
+                Files.write(path, image.getBytes());
+
+                String fileUrl = "http://localhost:8080/images/spots/" + newFilename;
+                location.setImageUrl(fileUrl);
+
+            } catch (IOException e) {
+                throw new RuntimeException("Nie udało się zapisać zdjęcia", e);
+            }
+        }
+
+        Location saved = locationRepository.save(location);
         return mapToResponse(saved);
     }
 
@@ -54,6 +81,7 @@ public class LocationService {
                 .longitude(location.getLongitude())
                 .isPrivate(location.getIsPrivate() != null && location.getIsPrivate())
                 .ownerUsername(location.getUser() != null ? location.getUser().getUsername() : "System")
+                .imageUrl(location.getImageUrl())
                 .build();
     }
 }

@@ -24,10 +24,12 @@ public class Location {
 
     private String description;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "is_private")
     private Boolean isPrivate;
 
-    // Jeśli user jest null, to lokalizacja jest "systemowa" (np. znane jezioro)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
