@@ -38,7 +38,6 @@ public class LocationService {
                 .user(user)
                 .build();
 
-        // 2. Obsługa zapisu pliku
         if (image != null && !image.isEmpty()) {
             try {
                 String folderPath = "images/spots/";
@@ -66,6 +65,13 @@ public class LocationService {
         return mapToResponse(saved);
     }
 
+    public LocationResponse getLocationById(Long id) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lokalizacja nie istnieje"));
+
+        return mapToResponse(location);
+    }
+
     public List<LocationResponse> getAvailableLocations(String username) {
         return locationRepository.findAllPublicAndUserPrivate(username).stream()
                 .map(this::mapToResponse)
@@ -83,5 +89,39 @@ public class LocationService {
                 .ownerUsername(location.getUser() != null ? location.getUser().getUsername() : "System")
                 .imageUrl(location.getImageUrl())
                 .build();
+    }
+
+    public LocationResponse updateLocation(Long id, LocationRequest request, MultipartFile image, String username) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lokalizacja nie istnieje"));
+
+        if (!location.getUser().getUsername().equals(username)) {
+            throw new RuntimeException("Nie masz uprawnień do edycji tej lokalizacji");
+        }
+
+        location.setName(request.getName());
+        location.setDescription(request.getDescription());
+        location.setLatitude(request.getLatitude());
+        location.setLongitude(request.getLongitude());
+        location.setIsPrivate(request.getIsPrivate());
+        
+        if (image != null && !image.isEmpty()) {
+            try {
+                String folderPath = "images/spots/";
+                String originalFilename = image.getOriginalFilename();
+                String extension = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
+                String newFilename = java.util.UUID.randomUUID().toString() + extension;
+                java.nio.file.Path path = java.nio.file.Paths.get(folderPath + newFilename);
+                java.nio.file.Files.write(path, image.getBytes());
+
+                location.setImageUrl("http://localhost:8080/images/spots/" + newFilename);
+
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Błąd zapisu zdjęcia", e);
+            }
+        }
+
+        Location updated = locationRepository.save(location);
+        return mapToResponse(updated);
     }
 }

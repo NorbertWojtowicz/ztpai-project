@@ -36,4 +36,20 @@ public class LocationController {
     public ResponseEntity<List<LocationResponse>> getLocations(Authentication authentication) {
         return ResponseEntity.ok(locationService.getAvailableLocations(authentication.getName()));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LocationResponse> getLocationById(@PathVariable Long id) {
+        return ResponseEntity.ok(locationService.getLocationById(id));
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<LocationResponse> updateLocation(
+            @PathVariable Long id,
+            @ModelAttribute @Valid LocationRequest request,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            Authentication authentication) {
+
+        LocationResponse response = locationService.updateLocation(id, request, image, authentication.getName());
+        return ResponseEntity.ok(response);
+    }
 }
