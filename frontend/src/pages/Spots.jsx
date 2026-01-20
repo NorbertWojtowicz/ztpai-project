@@ -23,7 +23,6 @@ const Spots = () => {
             }
         }
 
-        // 2. Pobieranie danych
         const fetchSpots = async () => {
             try {
                 const data = await getJSON('http://localhost:8080/api/locations');
@@ -97,6 +96,26 @@ const Spots = () => {
                                                 alt={spot.name}
                                                 onError={(e) => { e.target.src = getRandomSpotImg(); }}
                                             />
+                                            {currentUser && spot.ownerUsername === currentUser && (
+                                                <Link
+                                                    to={`/spots/edit/${spot.id}`}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '10px',
+                                                        right: '10px',
+                                                        background: 'white',
+                                                        color: '#3b82f6',
+                                                        padding: '5px 10px',
+                                                        borderRadius: '5px',
+                                                        textDecoration: 'none',
+                                                        fontWeight: 'bold',
+                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                                                        fontSize: '0.8rem'
+                                                    }}
+                                                >
+                                                    Edit
+                                                </Link>
+                                            )}
                                         </div>
                                         <div className="spot-content">
                                             <h3 className="spot-title">{spot.name}</h3>

@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Spots from './pages/Spots';
 import NewSpot from './pages/NewSpot';
+import EditSpot from "./pages/EditSpot.jsx";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/spots" element={<Spots />} />
                 <Route path="/spots/new" element={<NewSpot />} />
+                <Route path="/spots/edit/:id" element={<EditSpot />} />
                 <Route path="*" element={<div>404 - Nie znaleziono strony</div>} />
             </Routes>
         </Router>
