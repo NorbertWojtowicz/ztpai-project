@@ -5,9 +5,11 @@ import com.example.ztpaiproject.dto.response.FishCatchResponse;
 import com.example.ztpaiproject.service.FishCatchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,18 +20,26 @@ public class FishCatchController {
 
     private final FishCatchService fishCatchService;
 
-    @PostMapping
-    public ResponseEntity<FishCatchResponse> addCatch(
-            @Valid @RequestBody FishCatchRequest request,
-            Authentication authentication
-    ) {
-        try {
-            return ResponseEntity.ok(fishCatchService.addCatch(request, authentication.getName()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<FishCatchResponse> getCatchById(@PathVariable Long id) {
+        return ResponseEntity.ok(fishCatchService.getCatchById(id));
+    }
 
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<FishCatchResponse> addCatch(
+            @ModelAttribute @Valid FishCatchRequest request,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            Authentication authentication) {
+        return ResponseEntity.ok(fishCatchService.addCatch(request, image, authentication.getName()));
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<FishCatchResponse> updateCatch(
+            @PathVariable Long id,
+            @ModelAttribute @Valid FishCatchRequest request,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            Authentication authentication) {
+        return ResponseEntity.ok(fishCatchService.updateCatch(id, request, image, authentication.getName()));
     }
 
     @GetMapping("/public")

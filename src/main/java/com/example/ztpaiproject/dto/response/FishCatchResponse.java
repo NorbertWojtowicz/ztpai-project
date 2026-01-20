@@ -17,6 +17,10 @@ public class FishCatchResponse {
     private BigDecimal weightKg;
     private BigDecimal lengthCm;
     private String imageUrl;
+    private Long fishSpeciesId;
+    private Long locationId;
+    private Long fishingToolId;
+    private Long fishingBaitId;
 
     @JsonProperty("isPrivate")
     private boolean privateRecord;

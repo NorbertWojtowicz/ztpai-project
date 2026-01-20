@@ -104,7 +104,7 @@ public class LocationService {
         location.setLatitude(request.getLatitude());
         location.setLongitude(request.getLongitude());
         location.setIsPrivate(request.getIsPrivate());
-        
+
         if (image != null && !image.isEmpty()) {
             try {
                 String folderPath = "images/spots/";
