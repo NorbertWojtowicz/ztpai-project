@@ -42,6 +42,8 @@ public class SecurityConfig {
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/locations").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/locations/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/catches").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/catches/**").permitAll()
                     .requestMatchers("/images/**").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
