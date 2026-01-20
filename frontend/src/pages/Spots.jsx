@@ -99,19 +99,7 @@ const Spots = () => {
                                             {currentUser && spot.ownerUsername === currentUser && (
                                                 <Link
                                                     to={`/spots/edit/${spot.id}`}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        top: '10px',
-                                                        right: '10px',
-                                                        background: 'white',
-                                                        color: '#3b82f6',
-                                                        padding: '5px 10px',
-                                                        borderRadius: '5px',
-                                                        textDecoration: 'none',
-                                                        fontWeight: 'bold',
-                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                                                        fontSize: '0.8rem'
-                                                    }}
+                                                    className="edit-btn-overlay"
                                                 >
                                                     Edit
                                                 </Link>
