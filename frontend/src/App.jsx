@@ -7,6 +7,12 @@ import Home from './pages/Home';
 import Spots from './pages/Spots';
 import NewSpot from './pages/NewSpot';
 import EditSpot from "./pages/EditSpot.jsx";
+import EditCatch from "./pages/EditCatch.jsx";
+import NewCatch from "./pages/NewCatch.jsx";
+import Catches from "./pages/Catches.jsx";
+import NewBait from "./pages/NewBait.jsx";
+import NewTool from "./pages/NewTool.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
     return (
@@ -22,6 +28,12 @@ function App() {
                 <Route path="/spots" element={<Spots />} />
                 <Route path="/spots/new" element={<NewSpot />} />
                 <Route path="/spots/edit/:id" element={<EditSpot />} />
+                <Route path="/catches" element={<Catches />} />
+                <Route path="/catches/new" element={<NewCatch />} />
+                <Route path="/catches/edit/:id" element={<EditCatch />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/gear/new-tool" element={<NewTool />} />
+                <Route path="/gear/new-bait" element={<NewBait />} />
                 <Route path="*" element={<div>404 - Nie znaleziono strony</div>} />
             </Routes>
         </Router>

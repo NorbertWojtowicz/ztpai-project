@@ -83,28 +83,28 @@ const Catches = () => {
                                     <div className="spot-content">
                                         <h3 className="spot-title">{item.fishSpeciesName}</h3>
                                         <div className="spot-distance">
-                                            <i className="fa-solid fa-scale-unbalanced"></i> {item.weightKg} kg
+                                            <i className="fa-solid fa fa-scale-unbalanced"></i> {item.weightKg} kg
                                             <span style={{margin: '0 5px'}}>|</span>
-                                            <i className="fa-solid fa-ruler"></i> {item.lengthCm} cm
+                                            <i className="fa-solid fa fa-ruler"></i> {item.lengthCm} cm
                                         </div>
                                         <p style={{fontSize: '0.9rem', color: '#666'}}>
-                                            <i className="fa-solid fa-location-dot"></i> {item.locationName}
+                                            <i className="fa-solid fa fa-location-dot"></i> {item.locationName}
                                         </p>
                                         <div className="spot-tags" style={{marginTop: '10px'}}>
                                             {(item.isPrivate !== undefined ? item.isPrivate : item.private) && (
                                                 <span className="tag" style={{background: '#fee2e2', color: '#dc2626'}}>
-                                                    <i className="fa-solid fa-lock"></i> Private
+                                                    <i className="fa-solid fa fa-lock"></i> Private
                                                 </span>
                                             )}
 
                                             {item.wasReleased && (
                                                 <span className="tag" style={{background: '#dcfce7', color: '#15803d'}}>
-                                                    <i className="fa-solid fa-arrows-rotate"></i> Released
+                                                    <i className="fa-solid fa fa-arrows-rotate"></i> Released
                                                 </span>
                                             )}
 
                                             <span className="tag tag-fish">
-                                                <i className="fa-solid fa-user"></i> {item.username}
+                                                <i className="fa-solid fa fa-user"></i> {item.username}
                                             </span>
                                         </div>
                                     </div>
