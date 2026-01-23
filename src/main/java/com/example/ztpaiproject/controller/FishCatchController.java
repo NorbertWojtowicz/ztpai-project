@@ -51,4 +51,10 @@ public class FishCatchController {
     public ResponseEntity<List<FishCatchResponse>> getMyCatches(Authentication authentication) {
         return ResponseEntity.ok(fishCatchService.getMyCatches(authentication.getName()));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCatch(@PathVariable Long id, Authentication authentication) {
+        fishCatchService.deleteCatch(id, authentication);
+        return ResponseEntity.noContent().build();
+    }
 }

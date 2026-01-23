@@ -5,6 +5,8 @@ import com.example.ztpaiproject.dto.response.FishCatchResponse;
 import com.example.ztpaiproject.model.*;
 import com.example.ztpaiproject.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -194,5 +196,33 @@ public class FishCatchService {
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono połowu o ID: " + id));
 
         return mapToResponse(fishCatch);
+    }
+
+    public void deleteCatch(Long id, Authentication authentication) {
+        FishCatch fishCatch = catchRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono połowu o ID: " + id));
+
+        String currentUsername = authentication.getName();
+        String ownerUsername = fishCatch.getUser().getUsername();
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.contains("ADMIN"));
+
+        if (!ownerUsername.equals(currentUsername) && !isAdmin) {
+            throw new RuntimeException("Brak uprawnień do usunięcia tego połowu");
+        }
+
+        if (fishCatch.getImageUrl() != null) {
+            try {
+                String filename = fishCatch.getImageUrl().substring(fishCatch.getImageUrl().lastIndexOf("/") + 1);
+                Path filePath = Paths.get("images/catches/" + filename);
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                System.err.println("Nie udało się usunąć pliku zdjęcia: " + e.getMessage());
+            }
+        }
+
+        catchRepository.delete(fishCatch);
     }
 }
