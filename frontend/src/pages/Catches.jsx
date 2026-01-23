@@ -10,6 +10,7 @@ const Catches = () => {
     const [catches, setCatches] = useState([]);
     const [activeTab, setActiveTab] = useState('my');
     const [currentUser, setCurrentUser] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false); // Nowy stan dla Admina
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -18,8 +19,20 @@ const Catches = () => {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 setCurrentUser(payload.sub);
-            } catch (e) {}
+                checkUserRole();
+            } catch (e) {
+                console.error("Błąd dekodowania tokena", e);
+            }
         }
+
+        const checkUserRole = async () => {
+            try {
+                const profile = await getJSON('http://localhost:8080/api/user/profile');
+                if (profile.role === 'Admin' || profile.role === 'ADMIN') {
+                    setIsAdmin(true);
+                }
+            } catch (e) {}
+        };
 
         const fetchCatches = async () => {
             try {
@@ -34,9 +47,30 @@ const Catches = () => {
         fetchCatches();
     }, []);
 
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this catch?")) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`http://localhost:8080/api/catches/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (res.ok) {
+                setCatches(prev => prev.filter(item => item.id !== id));
+            } else {
+                alert("Nie udało się usunąć (Brak uprawnień?)");
+            }
+        } catch (err) {
+            alert("Błąd połączenia z serwerem");
+        }
+    };
+
     const filteredCatches = catches.filter(item => {
         const isPrivateSafe = item.isPrivate !== undefined ? item.isPrivate : (item.private || false);
-
         if (activeTab === 'my') {
             return item.username === currentUser;
         } else {
@@ -74,10 +108,30 @@ const Catches = () => {
                                             alt={item.fishSpeciesName}
                                             onError={(e) => {e.target.src = getRandomFishImg()}}
                                         />
-                                        {currentUser && item.username === currentUser && (
-                                            <Link to={`/catches/edit/${item.id}`} className="edit-btn-overlay">
-                                                Edit
-                                            </Link>
+
+                                        <div style={{position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px'}}>
+
+                                            {currentUser && item.username === currentUser && (
+                                                <Link to={`/catches/edit/${item.id}`} className="action-btn edit">
+                                                    <i className="fa-solid fa fa-pen"></i>
+                                                </Link>
+                                            )}
+
+                                            {currentUser && (item.username === currentUser || isAdmin) && (
+                                                <button
+                                                    onClick={() => handleDelete(item.id)}
+                                                    className="action-btn delete"
+                                                    title="Delete Catch"
+                                                >
+                                                    <i className="fa-solid fa fa-trash"></i>
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {item.wasReleased && (
+                                            <span className="tag-released">
+                                                <i className="fa-solid fa fa-arrows-rotate"></i> Released
+                                            </span>
                                         )}
                                     </div>
                                     <div className="spot-content">
@@ -91,18 +145,6 @@ const Catches = () => {
                                             <i className="fa-solid fa fa-location-dot"></i> {item.locationName}
                                         </p>
                                         <div className="spot-tags" style={{marginTop: '10px'}}>
-                                            {(item.isPrivate !== undefined ? item.isPrivate : item.private) && (
-                                                <span className="tag" style={{background: '#fee2e2', color: '#dc2626'}}>
-                                                    <i className="fa-solid fa fa-lock"></i> Private
-                                                </span>
-                                            )}
-
-                                            {item.wasReleased && (
-                                                <span className="tag" style={{background: '#dcfce7', color: '#15803d'}}>
-                                                    <i className="fa-solid fa fa-arrows-rotate"></i> Released
-                                                </span>
-                                            )}
-
                                             <span className="tag tag-fish">
                                                 <i className="fa-solid fa fa-user"></i> {item.username}
                                             </span>
@@ -115,13 +157,37 @@ const Catches = () => {
                 </div>
             </main>
             <Footer />
+
             <style>{`
-                .edit-btn-overlay {
-                    position: absolute; top: 10px; right: 10px;
-                    background: white; color: #3b82f6;
-                    padding: 5px 10px; border-radius: 5px;
-                    text-decoration: none; font-weight: bold;
+                .action-btn {
+                    background: white;
+                    border: none;
+                    padding: 8px;
+                    border-radius: 6px;
+                    cursor: pointer;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-decoration: none;
+                    width: 35px;
+                    height: 35px;
+                    transition: transform 0.1s, background 0.2s;
+                }
+                .action-btn:hover { transform: scale(1.05); }
+                
+                .action-btn.edit { color: #3b82f6; } /* Niebieski */
+                .action-btn.edit:hover { background: #eff6ff; }
+
+                .action-btn.delete { color: #ef4444; } /* Czerwony */
+                .action-btn.delete:hover { background: #fef2f2; }
+
+                .tag-released {
+                    position: absolute; top: 10px; left: 10px;
+                    background: #dcfce7; color: #15803d;
+                    padding: 4px 8px; border-radius: 4px;
+                    font-size: 12px; font-weight: bold;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 }
             `}</style>
         </>
