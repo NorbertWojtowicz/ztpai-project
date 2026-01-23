@@ -10,4 +10,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     @Query("SELECT l FROM Location l LEFT JOIN l.user u WHERE l.isPrivate = false OR u.username = :username")
     List<Location> findAllPublicAndUserPrivate(@Param("username") String username);
+
+    long countByUserUsername(String username);
 }
