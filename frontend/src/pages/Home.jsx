@@ -12,7 +12,6 @@ const Home = () => {
     useEffect(() => {
         const fetchCatches = async () => {
             const data = await getJSON('http://localhost:8080/api/catches/public');
-            console.log(data);
             if (Array.isArray(data)) {
                 setRecentCatches(data.slice(0, 3));
             }
@@ -20,7 +19,6 @@ const Home = () => {
 
         const fetchSpots = async () => {
             const data = await getJSON('http://localhost:8080/api/locations');
-            console.log(data);
             if (Array.isArray(data)) {
                 setPopularSpots(data.slice(0, 3));
             }

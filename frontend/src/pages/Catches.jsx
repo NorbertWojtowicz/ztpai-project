@@ -10,10 +10,24 @@ const Catches = () => {
     const [catches, setCatches] = useState([]);
     const [activeTab, setActiveTab] = useState('my');
     const [currentUser, setCurrentUser] = useState('');
-    const [isAdmin, setIsAdmin] = useState(false); // Nowy stan dla Admina
+    const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const checkUserRole = async () => {
+            try {
+                const profile = await getJSON('http://localhost:8080/api/users/profile');
+
+
+                if (profile.role && profile.role.toUpperCase().includes('ADMIN')) {
+                    setIsAdmin(true);
+                } else {
+                    setIsAdmin(false);
+                }
+            } catch (e) {
+                console.error("Błąd pobierania profilu:", e);
+            }
+        };
         const token = localStorage.getItem('token');
         if (token) {
             try {
@@ -24,15 +38,6 @@ const Catches = () => {
                 console.error("Błąd dekodowania tokena", e);
             }
         }
-
-        const checkUserRole = async () => {
-            try {
-                const profile = await getJSON('http://localhost:8080/api/user/profile');
-                if (profile.role === 'Admin' || profile.role === 'ADMIN') {
-                    setIsAdmin(true);
-                }
-            } catch (e) {}
-        };
 
         const fetchCatches = async () => {
             try {

@@ -38,8 +38,7 @@ const Spots = () => {
 
         fetchSpots();
     }, []);
-
-    console.log(spots);
+    
 
     const filteredSpots = spots.filter(spot => {
         if (activeTab === 'my') {
